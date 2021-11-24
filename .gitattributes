@@ -1,0 +1,4 @@
+out1.txt filter=lfs diff=lfs merge=lfs -text
+out2_distinct.txt filter=lfs diff=lfs merge=lfs -text
+out2_index.txt filter=lfs diff=lfs merge=lfs -text
+out3.txt filter=lfs diff=lfs merge=lfs -text

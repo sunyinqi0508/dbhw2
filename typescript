@@ -1,0 +1,204 @@
+Script started on Wed Nov 24 16:44:47 2021
+]7;file://billsuns-mbp.fios-router.home/Users/bill/Desktop/adb-2[1m[7m%[27m[1m[0m                                                                                                                                                                                  ]7;file://billsuns-mbp.fios-router.home/Users/bill/Desktop/adb-2]2;bill@billsuns-mbp]1;~/Desktop/adb-2]7;file://billsuns-mbp.fios-router.home/Users/bill/Desktop/adb-2[0m[27m[24m[J[39m[0m[49m[42m[97m ♥ [102m[32m[39m bill@billsuns-mbp [44m[92m[37m ~/Desktop/adb-2 [49m[34m[39m [K[?1h=[?2004h../run.sh[?1l>[?2004l
+]2;./run.sh]1;./run.shThis script runs on my settings. Please only consider using this as a reference.
+g++ ./datagen.cpp -march=native -Ofast --std=c++0x -s -o datagen
+ld: warning: option -s is obsolete and being ignored
+
+frac = 0.300000, N = 70000
+--------------
+drop table if exists trade
+--------------
+
+--------------
+create table trade(stocksymbol varchar(15), time decimal(9), quantity decimal(5), price decimal(3))
+--------------
+
+--------------
+LOAD DATA INFILE '~/Desktop/trade.csv' INTO TABLE trade
+FIELDS TERMINATED BY ',' 
+IGNORE 1 LINES
+--------------
+
+
+frac = 0.999000, N = 50
+--------------
+drop table if exists trade_decimal
+--------------
+
+--------------
+create table trade_decimal(stocksymbol decimal, time decimal(9), quantity decimal(5), price decimal(3))
+--------------
+
+--------------
+insert into trade_decimal 
+select cast(substring(stocksymbol, 2, 15) as decimal) stocksymbol, time, quantity, price 
+from trade
+--------------
+
+--------------
+drop table if exists trade_dense
+--------------
+
+--------------
+drop table if exists trade_dense_decimal
+--------------
+
+--------------
+create table trade_dense(stocksymbol varchar(15), time decimal(9), quantity decimal(5), price decimal(3))
+--------------
+
+--------------
+LOAD DATA INFILE '~/Desktop/ConsoleApplication37/dense/trade.csv' INTO TABLE trade_dense
+FIELDS TERMINATED BY ',' 
+IGNORE 1 LINES
+--------------
+
+--------------
+create table trade_dense_decimal(stocksymbol decimal, time decimal(9), quantity decimal(5), price decimal(3))
+--------------
+
+--------------
+insert into trade_dense_decimal 
+select cast(substring(stocksymbol, 2, 15) as decimal) stocksymbol, time, quantity, price 
+from trade_dense
+--------------
+
+--------------
+drop table if exists trade_copy3
+--------------
+
+--------------
+drop table if exists trade_copy2
+--------------
+
+--------------
+drop table if exists trade_copy
+--------------
+
+--------------
+CREATE TABLE trade_copy LIKE trade
+--------------
+
+--------------
+insert into trade_copy 
+select stocksymbol, time, quantity, price 
+from trade
+--------------
+
+--------------
+CREATE TABLE trade_copy2 LIKE trade
+--------------
+
+--------------
+insert into trade_copy2 
+select stocksymbol, time, quantity, price 
+from trade
+--------------
+
+--------------
+CREATE TABLE trade_copy3 LIKE trade
+--------------
+
+KDB+ 4.0 2021.07.12 Copyright (C) 1993-2021 Kx Systems
+m64/ 8(16)core 16384MB bill billsuns-mbp.fios-router.home 192.168.1.249 EXPIRE 2022.11.21 ys3540@nyu.edu KOD #5006568
+
+`trade
+`trade_decimal
+`trade_dense_decimal
+`trade
+`trade_decimal
+`trade_dense_decimal
++`stocksymbol`time!(`s68872`s1644`s7080`s10419`s24312`s23048`s13789`s55833`s1..
++`stocksymbol`time!(`s68872`s1644`s7080`s10419`s24312`s23048`s13789`s55833`s1..
++`stocksymbol`time!(`68872`1644`7080`10419`24312`23048`13789`55833`14021`2608..
++`stocksymbol`time!(`68872`1644`7080`10419`24312`23048`13789`55833`14021`2608..
++`stocksymbol`time!(27 42 42 40 36 44 4 5 6 16 18 2 1 24 13 42 16 23 5 19 21 ..
++`stocksymbol`time!(27 42 42 40 36 44 4 5 6 16 18 2 1 24 13 42 16 23 5 19 21 ..
+,"distinct string sparse:"
+0D00:00:00.655658000
+,"string sparse"
+0D00:00:00.000368000
+,"distinct decimal sparse:"
+0D00:00:00.530014000
+,"decimal sparse"
+0D00:00:00.000355000
+,"distinct decimal dense:"
+0D00:00:00.591935000
+,"decimal dense"
+0D00:00:00.000182000
+
+frac = 0.100000, N = 50
+KDB+ 4.0 2021.07.12 Copyright (C) 1993-2021 Kx Systems
+m64/ 8(16)core 16384MB bill billsuns-mbp.fios-router.home 192.168.1.249 EXPIRE 2022.11.21 ys3540@nyu.edu KOD #5006568
+
+,"****** preparing data ******"
+`stocksymbol_quantity
+`stocksymbol_price
+`stocksymbol_time
+`time_quantity
+`time_price
+`time_stocksymbol
+`trade
+`trade2
+`trade
+`time_quantity
+`time_price
+`time_stocksymbol
+`stocksymbol_time
+`stocksymbol_price
+`stocksymbol_quantity
+`t1
+`e1
++`stocksymbol`c__0!(`s#`s1`s10`s11`s12`s13`s14`s15`s16`s17`s18`s19`s2`s20`s21..
++`stocksymbol`c__0!(`s#`s1`s10`s11`s12`s13`s14`s15`s16`s17`s18`s19`s2`s20`s21..
++`stocksymbol`c__0!(`s#`13`20`22`28`29`3`30`31`32`34`35`38`39`4`41`43`46`48`5..
+`t2
+`t3
++`stocksymbol`c__0!(`s#`13`20`22`28`29`3`30`31`32`34`35`38`39`4`41`43`46`48`5..
+,"Experiment 1:"
+,"denorm time:"
+0D00:00:00.001095000
+,"norm time"
+0D00:00:00.006123000
+,"Experiment 2:"
+,"denorm time:"
+0D00:00:00.224400000
+,"norm time"
+0D00:00:00.080193000
+--------------
+drop table if exists likes
+--------------
+
+--------------
+drop table if exists friend
+--------------
+
+--------------
+create table likes(person decimal(9), artist decimal(9))
+--------------
+
+--------------
+create table friend(person1 decimal(9), person2 decimal(9))
+--------------
+
+--------------
+LOAD DATA INFILE '~/Desktop/like.csv' INTO TABLE likes
+FIELDS TERMINATED BY ',' 
+IGNORE 1 LINES
+--------------
+
+--------------
+LOAD DATA INFILE '~/Desktop/friends.csv' INTO TABLE friend
+FIELDS TERMINATED BY ',' 
+IGNORE 1 LINES
+--------------
+
+--------------
+drop table if exists unique_likes
+--------------
+
+--------------
+drop table if exists unique_friend
+--------------
+
+[1m[7m%[27m[1m[0m                                                                                                                                                                                  ]7;file://billsuns-mbp.fios-router.home/Users/bill/Desktop/adb-2]2;bill@billsuns-mbp]1;~/Desktop/adb-2]7;file://billsuns-mbp.fios-router.home/Users/bill/Desktop/adb-2[0m[27m[24m[J[39m[0m[49m[42m[97m ♥ [102m[32m[39m bill@billsuns-mbp [44m[92m[37m ~/Desktop/adb-2 [49m[34m[39m [K[?1h=[?2004h

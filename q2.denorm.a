@@ -1,0 +1,72 @@
+
+<q>\echo "****** preparing data ******"</q>
+CREATE TABLE stocksymbol_quantity (stocksymbol string, quantity INT)
+CREATE TABLE stocksymbol_price (stocksymbol string, price INT)
+CREATE TABLE stocksymbol_time (stocksymbol string,  time INT)
+CREATE TABLE time_quantity (time int, quantity INT)
+CREATE TABLE time_price (time int, price INT)
+CREATE TABLE time_stocksymbol (time int,  stocksymbol string)
+
+CREATE TABLE trade (stocksymbol string, time INT, quantity INT, price INT)
+CREATE TABLE trade2 (stocksymbol string, time INT, quantity INT, price INT)
+
+LOAD DATA INFILE "trade.csv"
+INTO TABLE trade
+FIELDS TERMINATED BY ","
+
+LOAD DATA INFILE "time_quantity.csv"
+INTO TABLE time_quantity
+FIELDS TERMINATED BY ","
+LOAD DATA INFILE "time_price.csv"
+INTO TABLE time_price
+FIELDS TERMINATED BY ","
+LOAD DATA INFILE "time_stocksymbol.csv"
+INTO TABLE time_stocksymbol
+FIELDS TERMINATED BY ","
+
+LOAD DATA INFILE "stocksymbol_time.csv"
+INTO TABLE stocksymbol_time
+FIELDS TERMINATED BY ","
+LOAD DATA INFILE "stocksymbol_price.csv"
+INTO TABLE stocksymbol_price
+FIELDS TERMINATED BY ","
+LOAD DATA INFILE "stocksymbol_quantity.csv"
+INTO TABLE stocksymbol_quantity
+FIELDS TERMINATED BY ","
+
+CREATE TABLE t1 AS
+    select
+    stocksymbol, quantity, price from
+    stocksymbol_price p inner join stocksymbol_quantity q using stocksymbol
+
+CREATE TABLE e1 AS
+    select
+    stocksymbol, time,quantity from
+    time_quantity inner join time_stocksymbol using time
+
+
+<q>start:.z.p;</q>
+
+select stocksymbol, sum(quantity) from e1 group by stocksymbol
+<q>denorm1:.z.p-start;
+start:.z.p;</q>
+select stocksymbol, sum(quantity) from time_quantity inner join time_stocksymbol using time group by stocksymbol
+<q>norm1:.z.p-start</q>
+
+<q>start:.z.p;</q>
+select stocksymbol, sum(price*quantity)/sum(quantity) from t1 where quantity < 1000 and price < 200 group by stocksymbol
+<q>
+denorm:.z.p-start;
+start:.z.p;
+</q>
+create table t2 as
+    select stocksymbol, quantity from stocksymbol_quantity where quantity < 1000
+create table t3 as
+    select stocksymbol, price from stocksymbol_price where price < 200
+select stocksymbol, sum(price*quantity)/sum(quantity) from t2 inner join t3 using stocksymbol group by stocksymbol
+<q>\echo "Experiment 1:"</q>
+<q>\echo "denorm time:"</q><q>denorm1</q><q>\echo "norm time"</q><q>norm1</q>
+<q>\echo "Experiment 2:"</q>
+<q>\echo "denorm time:"</q><q>denorm</q><q>\echo "norm time"</q><q>.z.p-start</q>
+
+<q>exit 0</q>

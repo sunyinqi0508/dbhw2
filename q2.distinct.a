@@ -1,0 +1,37 @@
+
+CREATE TABLE trade (stocksymbol string, time INT, quantity INT, price INT)
+CREATE TABLE trade_decimal (stocksymbol string, time INT, quantity INT, price INT)
+CREATE TABLE trade_dense_decimal (stocksymbol int, time INT, quantity INT, price INT)
+LOAD DATA INFILE "trade.csv"
+INTO TABLE trade
+FIELDS TERMINATED BY ","
+
+LOAD DATA INFILE "trade_numerical.csv"
+INTO TABLE trade_decimal
+FIELDS TERMINATED BY ","
+
+LOAD DATA INFILE "dense/trade_numerical.csv"
+INTO TABLE trade_dense_decimal
+FIELDS TERMINATED BY ","
+<q>start:.z.p</q>
+select distinct stocksymbol, time from trade
+<q>dstrsparse:.z.p-start;start:.z.p;</q>
+select stocksymbol, time from trade
+<q>strsparse:.z.p-start;start:.z.p;</q>
+
+select distinct stocksymbol, time from trade_decimal
+<q>ddecsparse:.z.p-start;start:.z.p;</q>
+
+select stocksymbol, time from trade_decimal
+<q>decsparse:.z.p-start;start:.z.p;</q>
+
+
+select distinct stocksymbol, time from trade_dense_decimal
+<q>ddecdense:.z.p-start;start:.z.p;</q>
+
+select stocksymbol, time from trade_dense_decimal
+<q>decdense:.z.p-start;</q>
+<q>\echo "distinct string sparse:"</q><q>dstrsparse</q><q>\echo "string sparse"</q><q>strsparse</q>
+<q>\echo "distinct decimal sparse:"</q><q>ddecsparse</q><q>\echo "decimal sparse"</q><q>decsparse</q>
+<q>\echo "distinct decimal dense:"</q><q>ddecdense</q><q>\echo "decimal dense"</q><q>decdense</q>
+<q>exit 0</q>
